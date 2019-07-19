@@ -1,16 +1,62 @@
+import * as Yup from 'yup';
+import { isBefore, parse, startOfDay, endOfDay } from 'date-fns';
+import { Op } from 'sequelize';
+
 import File from '../models/File';
+import User from '../models/User';
 import Meetup from '../models/Meetup';
-import { isBefore } from 'date-fns';
 
 class MeetupController {
-  async store(req, res) {
-    const { title, description, location, date } = req.body;
- 
-    if (isBefore(date, new Date()))
-    {
-      return res.json
+  async index(req, res) {
+    const MAX_PER_PAGE = 10;
+    const where = {};
+    const page = req.query.page || 1;
+
+    if (req.query.date) {
+      const searchDate = parse(req.query.date);
+
+      where.date = {
+        [Op.between]: [startOfDay(searchDate), endOfDay(searchDate)],
+      };
     }
- 
+
+    const meetups = await Meetup.findAll({
+      where,
+      include: [
+        {
+          model: User,
+          attributes: ['name', 'email'],
+        },
+      ],
+      limit: MAX_PER_PAGE,
+      offset: MAX_PER_PAGE * page - MAX_PER_PAGE,
+    });
+
+    return res.json(meetups);
+  }
+
+  async store(req, res) {
+    const schema = Yup.object().shape({
+      title: Yup.string()
+        .required()
+        .min(3),
+      description: Yup.string().required(),
+      location: Yup.string().required(),
+      date: Yup.date().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails.' });
+    }
+
+    const { title, description, location, date } = req.body;
+
+    if (isBefore(date, new Date())) {
+      return res
+        .status(400)
+        .json({ error: "Can't include meetups with past dates." });
+    }
+
     const { originalname, filename: path } = req.file;
 
     const file = await File.create({ name: originalname, path });
@@ -25,6 +71,89 @@ class MeetupController {
     });
 
     return res.json(meetup);
+  }
+
+  async update(req, res) {
+    const schema = Yup.object().shape({
+      title: Yup.string()
+        .required()
+        .min(3),
+      description: Yup.string().required(),
+      location: Yup.string().required(),
+      date: Yup.date().required(),
+    });
+
+    if (!(await schema.isValid(req.body))) {
+      return res.status(400).json({ error: 'Validation fails.' });
+    }
+
+    const meetupId = req.params.id;
+    const { title, description, location, date } = req.body;
+
+    const meetup = await Meetup.findByPk(meetupId);
+
+    if (!meetup) {
+      return res.status(404).json({ error: "Meetup doesn't exists." });
+    }
+
+    if (meetup.user_id !== req.userId) {
+      return res.status(401).json({ error: "Can't update other's meetup." });
+    }
+
+    if (meetup.past) {
+      return res.status(400).json({ error: "Can't update pasted meetups." });
+    }
+
+    if (isBefore(date, new Date())) {
+      return res
+        .status(400)
+        .json({ error: "Can't update meetups with past dates." });
+    }
+
+    if (req.file) {
+      const { originalname, filename: path } = req.file;
+      const file = await File.create({ name: originalname, path });
+
+      return res.json(
+        await meetup.update({
+          title,
+          description,
+          location,
+          date,
+          banner: file.id,
+          user_id: req.userId,
+        })
+      );
+    }
+    return res.json(
+      await meetup.update({
+        title,
+        description,
+        location,
+        date,
+      })
+    );
+  }
+
+  async delete(req, res) {
+    const meetupId = req.params.id;
+    const meetup = await Meetup.findByPk(meetupId);
+
+    if (!meetup) {
+      return res.status(404).json({ error: "Meetup doesn't exists." });
+    }
+
+    if (meetup.user_id !== req.userId) {
+      return res.status(401).json({ error: "Can't cancel other's meetup." });
+    }
+
+    if (meetup.past) {
+      return res.status(400).json({ error: "Can't cancel pasted meetups." });
+    }
+
+    await meetup.destroy();
+
+    return res.send();
   }
 }
 
