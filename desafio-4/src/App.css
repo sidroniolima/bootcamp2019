@@ -1,0 +1,124 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #F2F2F2;
+  font-family: 'Helvetica Neue', 'Helvetica', Arial, sans-serif;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+}
+
+input, button {
+  outline: 0;
+}
+
+.content {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding: 0 30px;
+}
+
+header {
+  background: #4A90E2;
+  height: 64px;
+  padding: 20px 42px;
+}
+
+header .content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+header span {
+  font-size: 15px;
+  color: #fff;
+  margin-right: 31px;
+}
+
+section#posts .content .post {
+  margin: 20px 162px;
+  background: #fff;
+  border-radius: 4px;
+  padding: 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.25);
+
+  display: flex;  
+  flex-direction: column;
+}
+
+section#posts .content .post .body {
+  padding-bottom: 17px;
+  margin-bottom: 17px;
+  border-bottom: 1px solid #EEEEEE;
+}
+
+section#posts .content .post .body  .info {
+  display: flex;
+  padding-bottom: 17px;
+}
+
+section#posts .content .post .body .info .name {
+  display: flex;
+  flex-direction: column;
+
+  margin-left: 10px;
+}
+
+section#posts .content .post .body .info .name strong {
+  font-size: 14px;
+  color: #4A4A4A;
+}
+
+section#posts .content .post .body  .info .name span {
+  font-size: 11px;
+  color: #9A9A9A;
+  position: relative;  
+  padding-left: 10px;
+}
+
+section#posts .content .post .body .info .name span::before {
+  content: '';
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: #9A9A9A;
+  position: absolute;
+  top: 5px;
+  left: 0;
+}
+
+section#posts .content .post .body .info img {
+  width: 32px;
+  height: 32px;
+}
+
+section#posts .content .post .body p {
+  font-size: 14px;
+  color: #3E3E3E;
+}
+
+section#posts .content .post .comments .comment {
+  display: flex;
+  margin-bottom: 10px;
+
+}
+
+section#posts .content .post .comments .comment img {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+section#posts .content .post .comments .comment p {
+  margin-left: 10px;
+  border-radius: 10px;
+  background: #EEEEEE;
+  font-size: 13px;
+  color: #3E3E3E;
+
+  padding: 10px 15px;  
+}
