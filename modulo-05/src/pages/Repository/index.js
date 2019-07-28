@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 import api from '../../services/api';
 
-import { Loading, Owner, IssueList, Label } from './styles';
+import { Loading, Owner, IssueList, Label, Filters, Filter } from './styles';
 import { Container } from '../../components/Container';
 
 class Repository extends React.Component {
@@ -20,6 +20,11 @@ class Repository extends React.Component {
     repository: {},
     issues: [],
     loading: true,
+    filters: [
+      { value: 'open', label: 'Abertas', active: true, },
+      { value: 'closed', label: 'Fehcadas', active: false, },
+      { value: 'all', label: 'Todas', active: false, }
+    ]
   };
 
   async componentDidMount() {
@@ -43,13 +48,18 @@ class Repository extends React.Component {
     });
   }
 
+  handleFilterClick = (e) => {
+    this.setState({filters: [...this.state.filters, e]});
+    console.log(this.state.filters)
+  }
+
   render() {
-    const { repository, issues, loading } = this.state;
+    const { repository, issues, loading, filters } = this.state;
 
     if (loading) {
       return <Loading>Carregando</Loading>;
     }
-    console.log(issues);
+
     return (
       <Container>
         <Owner>
@@ -59,8 +69,21 @@ class Repository extends React.Component {
           <h1>{repository.full_name}</h1>
           <p>{repository.description}</p>
         </Owner>
+        
+        <Filters>
+            {filters.map(filter => (
+              <Filter 
+                key={filter.value} 
+                active={filter.active} 
+                onClick={() => this.handleFilterClick(filter)}
+              >
+                {filter.label}
+              </Filter>
+            ))}
+          </Filters>
 
         <IssueList>
+
           {issues.map(issue => (
             <li key={String(issue.id)}>
               <img src={issue.user.avatar_url} alt={issue.user.login} />

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
 export const Loading = styled.div`
   display: flex;
@@ -101,3 +101,40 @@ export const Label = styled.span`
   padding: 3px 4px;
   border-radius: 2px;
 `;
+
+export const Filters = styled.ul`
+  display: flex;
+  list-style: none;
+  justify-content: flex-end;
+  height: 100%;
+  margin-top: 15px;
+  }
+`
+
+export const Filter = styled.li`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  position: relative;
+  margin-left: 10px;
+
+  padding: 5px 15px;
+  height: 100%;
+  
+  color: #222;
+  font-size: 12px;
+
+  cursor: pointer;
+
+  ${props => props.active && css`&:after  {
+    content: '';
+    height: 2px;
+    width: 100%;
+    background: #9157c1;
+    position: absolute;
+    bottom: 0;
+    left: 0;  
+  }`}
+  `
