@@ -1,4 +1,4 @@
-import styled, {css} from 'styled-components';
+import styled, { css } from 'styled-components';
 
 export const Loading = styled.div`
   display: flex;
@@ -46,7 +46,7 @@ export const IssueList = styled.ul`
   flex-direction: column;
   border-top: 1px solid #eee;
 
-  padding-top: 30px;
+  padding-top: 15px;
   margin-top: 30px;
 
   li {
@@ -109,32 +109,66 @@ export const Filters = styled.ul`
   height: 100%;
   margin-top: 15px;
   }
-`
+`;
 
 export const Filter = styled.li`
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
-  
+
   position: relative;
   margin-left: 10px;
 
   padding: 5px 15px;
   height: 100%;
-  
+
   color: #222;
   font-size: 12px;
 
+  border: 0;
+  & + li {
+    margin-top: 0;
+  }
+
   cursor: pointer;
 
-  ${props => props.active && css`&:after  {
-    content: '';
-    height: 2px;
-    width: 100%;
+  ${props =>
+    props.active &&
+    css`
+      &:after {
+        content: '';
+        height: 2px;
+        width: 100%;
+        background: #9157c1;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+      }
+    `}
+`;
+
+export const Pagination = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 15px;
+  padding: 0 15px;
+
+  button {
+    height: 24px;
+    width: 24px;
+    border: 0;
+    border-radius: 50%;
     background: #9157c1;
-    position: absolute;
-    bottom: 0;
-    left: 0;  
-  }`}
-  `
+    text-align: center;
+
+    font-size: 18px;
+    color: #fff;
+    font-weight: 400;
+
+    &:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+  }
+`;
