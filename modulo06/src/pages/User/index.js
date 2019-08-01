@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { View } from 'react-native';
-
 import api from '../../services/api';
+
+import Loading from '../../components/Loading';
 
 import {
   Container,
@@ -21,6 +21,7 @@ import {
 export default class User extends React.Component {
   static propTypes = PropTypes.shape({
     getParam: PropTypes.func,
+    navigate: PropTypes.func,
   }).isRequired;
 
   static navigationOptions = ({ navigation }) => ({
@@ -29,21 +30,48 @@ export default class User extends React.Component {
 
   state = {
     stars: [],
+    loading: true,
+    page: 2,
+    refreshing: false,
   };
 
   async componentDidMount() {
+    await this.load();
+  }
+
+  load = async (page = 1) => {
+    const { stars } = this.state;
+
     const { navigation } = this.props;
     const user = navigation.getParam('user');
 
-    const response = await api.get(`/users/${user.login}/starred`);
+    const response = await api.get(`/users/${user.login}/starred`, {
+      params: {
+        page,
+      },
+    });
 
-    this.setState({ stars: response.data });
-  }
+    this.setState({
+      stars: page > 2 ? [...stars, ...response.data] : response.data,
+      loading: false,
+      refreshing: false,
+      page,
+    });
+  };
+
+  refreshList = async () => {
+    await this.setState({ page: 1, refreshing: true, stars: [] }, this.load);
+  };
+
+  handleStarredPress = starred => {
+    const { navigation } = this.props;
+    navigation.navigate('Repository', { starred });
+  };
 
   render() {
     const { navigation } = this.props;
+    const { stars, loading, refreshing, page } = this.state;
     const user = navigation.getParam('user');
-    const { stars } = this.state;
 
     return (
       <Container>
@@ -53,19 +81,27 @@ export default class User extends React.Component {
           <Bio>{user.bio}</Bio>
         </Header>
 
-        <Stars
-          data={stars}
-          keyExtractor={star => String(star.id)}
-          renderItem={({ item }) => (
-            <Starred>
-              <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
-              <Info>
-                <Title>{item.name}</Title>
-                <Author>{item.owner.login}</Author>
-              </Info>
-            </Starred>
-          )}
-        />
+        {loading ? (
+          <Loading />
+        ) : (
+          <Stars
+            data={stars}
+            keyExtractor={star => String(star.id)}
+            nEndReachedThreshold={0.2}
+            onEndReached={() => this.load(page + 1)}
+            onRefresh={this.refreshList}
+            refreshing={refreshing}
+            renderItem={({ item }) => (
+              <Starred onPress={() => this.handleStarredPress(item)}>
+                <OwnerAvatar source={{ uri: item.owner.avatar_url }} />
+                <Info>
+                  <Title>{item.name}</Title>
+                  <Author>{item.owner.login}</Author>
+                </Info>
+              </Starred>
+            )}
+          />
+        )}
       </Container>
     );
   }
