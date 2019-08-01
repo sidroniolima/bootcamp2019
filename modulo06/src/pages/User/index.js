@@ -35,8 +35,8 @@ export default class User extends React.Component {
     refreshing: false,
   };
 
-  async componentDidMount() {
-    await this.load();
+  componentDidMount() {
+    this.load();
   }
 
   load = async (page = 1) => {
@@ -52,7 +52,7 @@ export default class User extends React.Component {
     });
 
     this.setState({
-      stars: page > 2 ? [...stars, ...response.data] : response.data,
+      stars: page >= 2 ? [...stars, ...response.data] : response.data,
       loading: false,
       refreshing: false,
       page,
