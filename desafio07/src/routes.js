@@ -4,6 +4,8 @@ import { createAppContainer, createStackNavigator } from 'react-navigation';
 import Header from './components/header';
 import Main from './pages/Main';
 
+import colors from './styles/colors';
+
 const Routes = createAppContainer(
   createStackNavigator(
     {
@@ -14,7 +16,7 @@ const Routes = createAppContainer(
         header: <Header {...navigation} />,
       }),
       cardStyle: {
-        backgroundColor: '#141419',
+        backgroundColor: colors.dark,
       },
     }
   )
