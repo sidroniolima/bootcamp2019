@@ -1,0 +1,66 @@
+{
+  "stock": [
+    {
+      "id": 1,
+      "amount": 3
+    },
+    {
+      "id": 2,
+      "amount": 5
+    },
+    {
+      "id": 3,
+      "amount": 2
+    },
+    {
+      "id": 4,
+      "amount": 1
+    },
+    {
+      "id": 5,
+      "amount": 5
+    },
+    {
+      "id": 6,
+      "amount": 10
+    }
+  ],
+  "products": [
+    {
+      "id": 1,
+      "title": "Brinco pendurado feminino Femon",
+      "price": 179.9,
+      "image": "https://cdn.shopify.com/s/files/1/0008/2434/4691/products/PALM-COIN-EARRING-SET-GOLD-01_1024x1024_0fa87081-ef2b-4398-b595-6b1b242ca85e.png?v=1549849636"
+    },
+    {
+      "id": 2,
+      "title": "Brinco pendurado feminino Fashion",
+      "price": 139.9,
+      "image": "http://cdn.shopify.com/s/files/1/0242/0295/products/f-h-jewellery-earring-18k-gold-plating-black-spinel-triple-threat-gemstone-earrings-11269953355869_grande.jpg?v=1558937269"
+    },
+    {
+      "id": 3,
+      "title": "Brinco segundo furo Lite 2.0",
+      "price": 219.9,
+      "image": "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-IhU8w4NCtavZBzvOAuHcKeCrfcd1WGk7Pzz-q7rU2sTRaHB5ng"
+    },
+    {
+      "id": 5,
+      "title": "Brinco ouro branco pendurado",
+      "price": 139.9,
+      "image": "https://cdn.shopify.com/s/files/1/1368/1799/products/PEG3-52_1024x1024.jpg?v=1553202660"
+    },
+    {
+      "id": 6,
+      "title": "Brinco prata Novela",
+      "price": 219.9,
+      "image": "https://cfcdn1.candere.com/media/catalog/product/cache/1/rose_gold_default/9df78eab33525d08d6e5fb8d27136e95/c/0/c015086_1_1.jpg"
+    },
+    {
+      "id": 4,
+      "title": "Brinco pendurado feminino",
+      "price": 179.9,
+      "image": "https://rocketseat-cdn.s3-sa-east-1.amazonaws.com/modulo-redux/tenis1.jpg"
+    }
+  ]
+}

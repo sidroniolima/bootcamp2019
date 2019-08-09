@@ -2,7 +2,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { Wrapper, Container, Logo, BasketContainer, QtyBadge } from './styles';
 
-export default function components() {
+export default function Header() {
   return (
     <Wrapper>
       <Container>
