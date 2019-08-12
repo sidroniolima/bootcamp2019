@@ -4,6 +4,7 @@ import { connect } from  'react-redux';
 import {bindActionCreators} from 'redux';
 import { formatPrice } from '../../util/format';
 import api from '../../services/api';
+import * as CartActions from '../../store/modules/cart/actions';
 
 import {
   Container,
@@ -32,26 +33,22 @@ class Main extends React.Component {
     const data = response.data.map(item => (
       {
         ...item,
-        formattedPrice: formatPrice(item.price)
+        formattedPrice: formatPrice(item.price),
       }
     ))
 
     this.setState({products: data});
   }
 
-  handleAddProduct = product => {
-    const { dispatch, navigation } = this.props;
+  handleAddProduct = id => {
+    const { addToCartRequest } = this.props;
 
-    dispatch({
-      type: '@cart/ADD',
-      product
-    })
-
-    navigation.navigate('Cart');
+    addToCartRequest(id);
   }
 
   render() {
     const { products } = this.state;
+    const { amount } = this.props;
 
     return (
       <Container horizontal>
@@ -66,10 +63,10 @@ class Main extends React.Component {
             />
             <Description>{product.title}</Description>
             <Price>{product.formattedPrice}</Price>
-            <Button onPress={() => this.handleAddProduct(product)}>
+            <Button onPress={() => this.handleAddProduct(product.id)}>
               <AddContainer>
                 <Icon name="add-shopping-cart" size={14} color="#fff" />
-                <Qty>3</Qty>
+                <Qty>{amount[product.id] || 0}</Qty>
               </AddContainer>
               <ButtonText>Adicionar</ButtonText>
             </Button>
@@ -83,9 +80,12 @@ class Main extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  cart: state.cart
+  amount: state.cart.reduce((amount, product) => {
+    amount[product.id] = product.amount;
+    return amount;
+  }, {})
 })
 
-const mapDispatchToProps = dispatch => (bindActionCreators({}, dispatch));
+const mapDispatchToProps = dispatch => (bindActionCreators(CartActions, dispatch));
 
-export default connect(mapStateToProps, null)(Main);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

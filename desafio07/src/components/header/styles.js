@@ -6,7 +6,7 @@ import colors from '../../styles/colors';
 
 export const Wrapper = styled.SafeAreaView`
   flex: 0;
-  background-color: ${colors.dark};
+  background: ${colors.dark};
   flex-direction: row;
 `;
 
@@ -29,11 +29,11 @@ export const BasketContainer = styled.TouchableOpacity`
   height: 24px;
   width: 24px;
   flex: 1;
-  justify-content: flex-end;
   align-items: flex-end;
+  justify-content: flex-end;
 `;
 
-export const QtyBadge = styled.Text`
+export const ItemCount = styled.Text`
   position: absolute;
   text-align: center;
   top: -8px;
