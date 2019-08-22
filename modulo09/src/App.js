@@ -6,10 +6,10 @@ import { ToastContainer } from 'react-toastify';
 
 import './config/ReactrotronConfig';
 
-import { store, persistor } from './store';
-
 import Routes from './routes';
 import history from './services/history';
+
+import { store, persistor } from './store';
 
 import GlobalStyle from './styles/global';
 
@@ -20,7 +20,7 @@ function App() {
         <Router history={history}>
           <Routes />
           <GlobalStyle />
-          <ToastContainer autoClose={3000}/>
+          <ToastContainer autoClose={3000} />
         </Router>
       </PersistGate>
     </Provider>

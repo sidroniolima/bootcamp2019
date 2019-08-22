@@ -39,6 +39,9 @@ export const Content = styled.div`
 export const Profile = styled.div`
   display: flex;
   align-items: center;
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 1px solid #eee;
 
   div {
     text-align: right;
