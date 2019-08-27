@@ -1,16 +1,45 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Route, Redirect } from 'react-router-dom';
 
-import SignIn from '~/pages/SignIn';
+import AuthLayout from '~/pages/_layouts/auth';
+import DefaultLayout from '~/pages/_layouts/default';
 
-export default function PrivateRoute({
+export default function RouteWrapper({
   component: Component,
   isPrivate,
   ...rest
 }) {
   const signed = false;
 
-  const componentComputed = signed && isPrivate ? component : <SignIn />;
+  if (!signed && isPrivate) {
+    return <Redirect to="/" />;
+  }
 
-  return <Route {...rest}>{componentComputed}</Route>;
+  if (signed && !isPrivate) {
+    return <Redirect to="/dashboard" />;
+  }
+
+  const Layout = signed ? DefaultLayout : AuthLayout;
+
+  return (
+    <Route
+      {...rest}
+      render={props => (
+        <Layout>
+          <Component {...props} />
+        </Layout>
+      )}
+    />
+  );
 }
+
+RouteWrapper.propTypes = {
+  component: PropTypes.oneOfType([PropTypes.element, PropTypes.func])
+    .isRequired,
+  isPrivate: PropTypes.bool,
+};
+
+RouteWrapper.defaultProps = {
+  isPrivate: false,
+};
