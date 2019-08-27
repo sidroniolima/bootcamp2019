@@ -27,6 +27,7 @@ export const Content = styled.div`
     a {
       text-decoration: none;
       color: #7159c1;
+      font-weight: 600;
     }
   }
 
@@ -39,6 +40,9 @@ export const Content = styled.div`
 export const Profile = styled.div`
   display: flex;
   align-items: center;
+  margin-left: 20px;
+  padding-left: 20px;
+  border-left: 1px solid #eee;
 
   div {
     text-align: right;
@@ -59,6 +63,7 @@ export const Profile = styled.div`
   }
 
   img {
+    width: 32px;
     height: 32px;
     border-radius: 50%;
   }
