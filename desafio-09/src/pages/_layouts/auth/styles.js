@@ -25,12 +25,24 @@ export const Content = styled.div`
       background: rgba(0, 0, 0, 0.1);
       border: 0;
       border-radius: 4px;
-      margin: 0 0 10px;
+      margin: 0 0 3px;
       color: #fff;
 
       &::placeholder {
         color: rgba(255, 255, 255, 0.7);
       }
+
+      & + input {
+        margin-top: 12px;
+      }
+    }
+
+    span {
+      color: #f94d6a;
+      text-align: left;
+      margin-top: 0;
+      margin-bottom: 10px;
+      font-size: 11px;
     }
 
     button {
@@ -38,7 +50,7 @@ export const Content = styled.div`
       padding: 10px;
       color: #fff;
       border: 0;
-      margin: 5px 0 0;
+      margin: 12px 0 0;
       height: 44px;
       background: #f94d6a;
       font-size: 16px;
