@@ -46,7 +46,11 @@ class UserController {
         ),
       password: Yup.string().min(6),
       confirmPassword: Yup.string().when('password', (password, field) =>
-        password ? field.required().oneOf([Yup.ref('password')]) : field
+        password
+          ? field
+              .required()
+              .oneOf([Yup.ref('password')], 'Passwords do not match')
+          : field
       ),
     });
 
