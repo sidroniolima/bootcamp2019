@@ -1,19 +1,15 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { MdKeyboardArrowRight } from 'react-icons/md';
-
-import { history } from '~/services/history';
 
 import { Container, Header, List } from './styles';
 
 export default function Dashboard() {
-  function handleNewMeetupClick() {
-    history.push('/meetup');
-  }
   return (
     <Container>
       <Header>
         <h1>Meus Meetups</h1>
-        <button onClick={handleNewMeetupClick}>Novo Meetup</button>
+        <Link to="/meetup">Novo Meetup</Link>
       </Header>
       <List>
         <li>

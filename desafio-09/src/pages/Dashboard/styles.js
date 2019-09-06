@@ -16,7 +16,8 @@ export const Header = styled.div`
     font-weight: 600;
   }
 
-  button {
+  a {
+    text-decoration: none;
     border: 0;
     border-radius: 4px;
     background: #f94d6a;
