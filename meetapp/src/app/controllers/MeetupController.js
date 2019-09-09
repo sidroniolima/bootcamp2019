@@ -35,6 +35,35 @@ class MeetupController {
     return res.json(meetups);
   }
 
+  async show(req, res) {
+    const MAX_PER_PAGE = 10;
+    const { id } = req.params;
+    const where = id ? { id } : {};
+    const page = req.query.page || 1;
+
+    if (req.query.date) {
+      const searchDate = parse(req.query.date);
+
+      where.date = {
+        [Op.between]: [startOfDay(searchDate), endOfDay(searchDate)],
+      };
+    }
+
+    const meetups = await Meetup.findOne({
+      where,
+      include: [
+        {
+          model: User,
+          attributes: ['name', 'email'],
+        },
+      ],
+      limit: MAX_PER_PAGE,
+      offset: MAX_PER_PAGE * page - MAX_PER_PAGE,
+    });
+
+    return res.json(meetups);
+  }
+
   async store(req, res) {
     const schema = Yup.object().shape({
       title: Yup.string()
@@ -57,16 +86,17 @@ class MeetupController {
         .json({ error: "Can't include meetups with past dates." });
     }
 
-    const { originalname, filename: path } = req.file;
-
-    const file = await File.create({ name: originalname, path });
+    if (req.file) {
+      const { originalname, filename: path } = req.file;
+      const file = await File.create({ name: originalname, path });
+    }
 
     const meetup = await Meetup.create({
       title,
       description,
       location,
       date,
-      banner: file.id,
+      banner: req.file ? file.id : null,
       user_id: req.userId,
     });
 

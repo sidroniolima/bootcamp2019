@@ -1,5 +1,6 @@
-import React from 'react';
-import { format } from 'date-fns';
+import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { format, parseISO } from 'date-fns';
 
 import { useSelector, useDispatch } from 'react-redux';
 import * as Yup from 'yup';
@@ -9,20 +10,31 @@ import InputDate from './InputDate';
 
 import { Container } from './styles';
 
-export default function Meetup() {
-  const dispatch = useDispatch();
-  const loading = false;
+import { saveRequest, fetchRequest } from '~/store/modules/meetup/actions';
 
-  const initialData = {
-    title: 'Teste',
-    description: 'Teste',
-    date: new Date(),
-    location: 'São Paulo',
-  };
+export default function Meetup({ match }) {
+  const dispatch = useDispatch();
+  const meetup = useSelector(state => state.meetup.meetup);
+  const loading = useSelector(state => state.meetup.loading);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { id } = match.params;
+      console.tron.log(id);
+      await dispatch(fetchRequest(id));
+    }
+
+    fetchData();
+  }, [dispatch, match.params]);
 
   function handleSubmit(data) {
-    // dispatch(updateProfileRequest(data));
-    console.tron.log(data.date);
+    const { id } = match.params;
+
+    if (id) {
+      data.id = id;
+    }
+
+    dispatch(saveRequest(data));
   }
   const schema = Yup.object().shape({
     title: Yup.string().required('Digite o título do evento'),
@@ -33,22 +45,37 @@ export default function Meetup() {
 
   return (
     <Container>
-      <Form
-        onSubmit={handleSubmit}
-        schema={schema}
-        autocomplete="off"
-        initialData={initialData}
-      >
-        <Input name="title" placeholder="Título do Meetup" />
-        <Input multiline name="description" placeholder="Descrição completa" />
+      {!loading && (
+        <Form
+          onSubmit={handleSubmit}
+          schema={schema}
+          autoComplete="off"
+          initialData={meetup}
+        >
+          <Input name="title" placeholder="Título do Meetup" />
+          <Input
+            multiline
+            name="description"
+            defaultValue={meetup.description}
+            placeholder="Descrição completa"
+          />
 
-        <InputDate placeholderText="Data do meetup" name="date" />
-        <Input name="location" placeholder="Localização" />
+          <InputDate
+            placeholderText="Data do meetup"
+            name="date"
+            defaultValue={meetup.date}
+          />
+          <Input name="location" placeholder="Localização" />
 
-        <button type="submit" disabled={loading}>
-          {loading ? 'Aguarde...' : 'Salvar meetup'}
-        </button>
-      </Form>
+          <button type="submit" disabled={loading}>
+            {loading ? 'Aguarde...' : 'Salvar meetup'}
+          </button>
+        </Form>
+      )}
     </Container>
   );
 }
+
+Meetup.defaultProps = {
+  match: {},
+};
