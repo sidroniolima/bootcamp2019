@@ -16,7 +16,9 @@ export default function Dashboard() {
           <strong>Congresso Nacional de Criminalística</strong>
           <div>
             <span>14 de outubro de 2019</span>
-            <MdKeyboardArrowRight color="#fff" size={24} />
+            <Link to="/meetup/view/20">
+              <MdKeyboardArrowRight color="#fff" size={24} />
+            </Link>
           </div>
         </li>
         <li>

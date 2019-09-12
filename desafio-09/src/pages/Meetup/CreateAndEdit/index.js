@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { format, parseISO } from 'date-fns';
 
 import { useSelector, useDispatch } from 'react-redux';
 import * as Yup from 'yup';
 import { Form, Input } from '@rocketseat/unform';
 
-import InputDate from './InputDate';
+import DateInput from './DateInput';
+import BannerInput from './BannerInput';
 
 import { Container } from './styles';
 
@@ -20,8 +20,10 @@ export default function Meetup({ match }) {
   useEffect(() => {
     async function fetchData() {
       const { id } = match.params;
-      console.tron.log(id);
-      await dispatch(fetchRequest(id));
+
+      if (id) {
+        await dispatch(fetchRequest(id));
+      }
     }
 
     fetchData();
@@ -36,6 +38,7 @@ export default function Meetup({ match }) {
 
     dispatch(saveRequest(data));
   }
+
   const schema = Yup.object().shape({
     title: Yup.string().required('Digite o título do evento'),
     description: Yup.string().required('Digite a descrição'),
@@ -52,6 +55,7 @@ export default function Meetup({ match }) {
           autoComplete="off"
           initialData={meetup}
         >
+          <BannerInput name="banner_id" />
           <Input name="title" placeholder="Título do Meetup" />
           <Input
             multiline
@@ -60,7 +64,7 @@ export default function Meetup({ match }) {
             placeholder="Descrição completa"
           />
 
-          <InputDate
+          <DateInput
             placeholderText="Data do meetup"
             name="date"
             defaultValue={meetup.date}
@@ -75,6 +79,14 @@ export default function Meetup({ match }) {
     </Container>
   );
 }
+
+Meetup.propTypes = {
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      id: PropTypes.string,
+    }),
+  }),
+};
 
 Meetup.defaultProps = {
   match: {},
