@@ -22,7 +22,7 @@ export default function Meetup({ match }) {
       const { id } = match.params;
 
       if (id) {
-        await dispatch(fetchRequest(id));
+        dispatch(fetchRequest(id));
       }
     }
 
@@ -41,6 +41,7 @@ export default function Meetup({ match }) {
 
   const schema = Yup.object().shape({
     title: Yup.string().required('Digite o título do evento'),
+    banner: Yup.number(),
     description: Yup.string().required('Digite a descrição'),
     date: Yup.date().required('Digite a data do evento'),
     location: Yup.string().required('Digite a localização do meetup'),
@@ -48,27 +49,22 @@ export default function Meetup({ match }) {
 
   return (
     <Container>
-      {!loading && (
+      {!loading && meetup && (
         <Form
           onSubmit={handleSubmit}
           schema={schema}
           autoComplete="off"
           initialData={meetup}
         >
-          <BannerInput name="banner_id" />
+          <BannerInput name="banner" />
           <Input name="title" placeholder="Título do Meetup" />
           <Input
             multiline
             name="description"
-            defaultValue={meetup.description}
             placeholder="Descrição completa"
           />
 
-          <DateInput
-            placeholderText="Data do meetup"
-            name="date"
-            defaultValue={meetup.date}
-          />
+          <DateInput placeholderText="Data do meetup" name="date" />
           <Input name="location" placeholder="Localização" />
 
           <button type="submit" disabled={loading}>

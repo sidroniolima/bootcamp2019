@@ -25,9 +25,16 @@ class MeetupController {
       include: [
         {
           model: User,
+          as: 'user',
           attributes: ['name', 'email'],
         },
+        {
+          model: File,
+          as: 'banner',
+          attributes: ['id', 'path', 'url'],
+        },
       ],
+
       limit: MAX_PER_PAGE,
       offset: MAX_PER_PAGE * page - MAX_PER_PAGE,
     });
@@ -54,7 +61,13 @@ class MeetupController {
       include: [
         {
           model: User,
+          as: 'user',
           attributes: ['name', 'email'],
+        },
+        {
+          model: File,
+          as: 'banner',
+          attributes: ['id', 'path', 'url'],
         },
       ],
       limit: MAX_PER_PAGE,
@@ -78,7 +91,7 @@ class MeetupController {
       return res.status(400).json({ error: 'Validation fails.' });
     }
 
-    const { title, description, location, date } = req.body;
+    const { title, description, location, date, banner } = req.body;
 
     if (isBefore(date, new Date())) {
       return res
@@ -96,7 +109,7 @@ class MeetupController {
       description,
       location,
       date,
-      banner: req.file ? file.id : null,
+      banner: banner || (req.file ? file.id : null),
       user_id: req.userId,
     });
 
@@ -118,7 +131,7 @@ class MeetupController {
     }
 
     const meetupId = req.params.id;
-    const { title, description, location, date } = req.body;
+    const { title, description, location, date, banner } = req.body;
 
     const meetup = await Meetup.findByPk(meetupId);
 
@@ -155,14 +168,18 @@ class MeetupController {
         })
       );
     }
-    return res.json(
-      await meetup.update({
-        title,
-        description,
-        location,
-        date,
-      })
-    );
+
+    const updated = await meetup.update({
+      title,
+      description,
+      location,
+      date,
+      banner,
+    });
+
+    console.log(updated);
+
+    return res.json(updated);
   }
 
   async delete(req, res) {

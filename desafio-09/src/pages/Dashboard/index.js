@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 import { MdKeyboardArrowRight } from 'react-icons/md';
+import { fetchOrganizingRequest } from '~/store/modules/organizing/actions';
 
 import { Container, Header, List } from './styles';
 
 export default function Dashboard() {
+  const dispatch = useDispatch();
+  const meetups = useSelector(state => state.organizing.meetups);
+
+  useEffect(() => {
+    dispatch(fetchOrganizingRequest());
+  }, [dispatch]);
+
   return (
     <Container>
       <Header>
@@ -12,30 +21,17 @@ export default function Dashboard() {
         <Link to="/meetup">Novo Meetup</Link>
       </Header>
       <List>
-        <li>
-          <strong>Congresso Nacional de Criminalística</strong>
-          <div>
-            <span>14 de outubro de 2019</span>
-            <Link to="/meetup/view/20">
-              <MdKeyboardArrowRight color="#fff" size={24} />
-            </Link>
-          </div>
-        </li>
-        <li>
-          <strong>Congresso Nacional de Criminalística</strong>
-          <div>
-            <span>14 de outubro de 2019</span>
-            <MdKeyboardArrowRight color="#fff" size={24} />
-          </div>
-        </li>
-
-        <li>
-          <strong>Congresso Nacional de Criminalística</strong>
-          <div>
-            <span>14 de outubro de 2019</span>
-            <MdKeyboardArrowRight color="#fff" size={24} />
-          </div>
-        </li>
+        {meetups.map(meetup => (
+          <li key={meetup.id}>
+            <strong>{meetup.title}</strong>
+            <div>
+              <span>{meetup.date}</span>
+              <Link to={`/meetup/view/${meetup.id}`}>
+                <MdKeyboardArrowRight color="#fff" size={24} />
+              </Link>
+            </div>
+          </li>
+        ))}
       </List>
     </Container>
   );

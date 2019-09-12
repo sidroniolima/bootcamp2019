@@ -9,7 +9,7 @@ import { DatePicker } from './styles';
 export default function DateInput({ name, placeholderText }) {
   const ref = useRef(null);
   const { fieldName, registerField, error, defaultValue } = useField(name);
-  const [selected, setSelected] = useState(Date.parse(defaultValue));
+  const [selected, setSelected] = useState(defaultValue);
 
   useEffect(() => {
     registerField({
@@ -30,6 +30,7 @@ export default function DateInput({ name, placeholderText }) {
         timeIntervals={60}
         timeCaption="Hora"
         dateCaption="Data"
+        timeFormat="HH:mm"
         dateFormat="dd/MM/yyyy HH:mm"
         name={fieldName}
         showTimeSelect
