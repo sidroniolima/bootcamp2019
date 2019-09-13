@@ -1,3 +1,7 @@
+export function newMeetup() {
+  return { type: '@meetup/NEW_MEETUP' };
+}
+
 export function saveRequest(data) {
   return { type: '@meetup/SAVE_REQUEST', payload: { data } };
 }

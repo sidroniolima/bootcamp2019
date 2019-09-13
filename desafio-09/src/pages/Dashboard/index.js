@@ -25,7 +25,7 @@ export default function Dashboard() {
           <li key={meetup.id}>
             <strong>{meetup.title}</strong>
             <div>
-              <span>{meetup.date}</span>
+              <span>{meetup.formattedDate}</span>
               <Link to={`/meetup/view/${meetup.id}`}>
                 <MdKeyboardArrowRight color="#fff" size={24} />
               </Link>

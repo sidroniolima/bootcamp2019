@@ -109,7 +109,7 @@ class MeetupController {
       description,
       location,
       date,
-      banner: banner || (req.file ? file.id : null),
+      banner_id: banner || (req.file ? file.id : null),
       user_id: req.userId,
     });
 
@@ -174,10 +174,8 @@ class MeetupController {
       description,
       location,
       date,
-      banner,
+      banner_id: banner,
     });
-
-    console.log(updated);
 
     return res.json(updated);
   }

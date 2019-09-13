@@ -2,9 +2,12 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { parseISO } from 'date-fns';
-import { Container, Header, Meetup } from './styles';
+import { toast } from 'react-toastify';
+import api from '~/services/api';
+import history from '~/services/history';
+
 import { fetchRequest } from '~/store/modules/meetup/actions';
+import { Container, Header, Meetup } from './styles';
 
 export default function View({ match }) {
   const dispatch = useDispatch();
@@ -22,6 +25,16 @@ export default function View({ match }) {
     load();
   }, [dispatch, match.params]);
 
+  async function handleCancel(id) {
+    try {
+      await api.delete(`/meetups/${id}`);
+      history.push('/dashboard');
+      toast.warn('Meetup cancelado');
+    } catch (error) {
+      toast.error('Não foi possível cancelar o Meetup');
+    }
+  }
+
   return meetup ? (
     meetup && (
       <Container>
@@ -29,7 +42,9 @@ export default function View({ match }) {
           <h1>{meetup.title}</h1>
           <div>
             <Link to={`/meetup/${meetup.id}`}>Editar</Link>
-            <button type="button">Cancelar</button>
+            <button type="button" onClick={() => handleCancel(meetup.id)}>
+              Cancelar
+            </button>
           </div>
         </Header>
         <Meetup>

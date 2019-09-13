@@ -10,7 +10,11 @@ import BannerInput from './BannerInput';
 
 import { Container } from './styles';
 
-import { saveRequest, fetchRequest } from '~/store/modules/meetup/actions';
+import {
+  saveRequest,
+  fetchRequest,
+  newMeetup,
+} from '~/store/modules/meetup/actions';
 
 export default function Meetup({ match }) {
   const dispatch = useDispatch();
@@ -23,6 +27,8 @@ export default function Meetup({ match }) {
 
       if (id) {
         dispatch(fetchRequest(id));
+      } else {
+        dispatch(newMeetup());
       }
     }
 
