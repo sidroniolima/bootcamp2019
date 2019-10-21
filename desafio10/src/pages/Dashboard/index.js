@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import {Alert} from 'react-native';
+import {withNavigationFocus} from 'react-navigation';
 import api from '~/services/api';
 
 import Background from '~/components/Background';
@@ -7,9 +9,11 @@ import DateInput from '~/components/DateInput';
 
 import {Container, MeetupList} from './styles';
 
-export default function Dashboard() {
+function Dashboard({isFocused}) {
   const [date, setDate] = useState(new Date());
+  const [page, setPage] = useState(1);
   const [meetups, setMeetups] = useState([]);
+  const [meetupsSize, setMeetupsSize] = useState();
 
   useEffect(() => {
     async function loadMeetups() {
@@ -21,10 +25,37 @@ export default function Dashboard() {
       });
 
       setMeetups(response.data);
+      setMeetupsSize(response.data.length);
     }
 
-    loadMeetups();
-  }, [date]);
+    if (isFocused) {
+      loadMeetups();
+    }
+  }, [date, isFocused]); //eslint-disable-line
+
+  async function loadMore() {
+    const nextPage = page + 1;
+
+    const response = await api.get(`/meetups`, {
+      params: {
+        date,
+        page: nextPage,
+      },
+    });
+
+    setMeetups([...meetups, ...response.data]);
+    setMeetupsSize(response.data.length);
+    setPage(nextPage);
+  }
+
+  async function handleSubscription(id) {
+    try {
+      await api.post(`/meetup/${id}/subscriptions`);
+      Alert.alert('Bem-vindo ao meetup!');
+    } catch (error) {
+      Alert.alert('Não foi possível a subscrição.');
+    }
+  }
 
   return (
     <Background>
@@ -33,9 +64,19 @@ export default function Dashboard() {
         <MeetupList
           data={meetups}
           keyExtractor={item => String(item.id)}
-          renderItem={({item}) => <Meetup data={item} />}
+          renderItem={({item}) => (
+            <Meetup
+              data={item}
+              onHandle={() => handleSubscription(item.id)}
+              buttonText="Realizar inscrição"
+            />
+          )}
+          onEndReached={meetupsSize >= 10 ? loadMore : null}
+          onEndReachedThreshold={0.2}
         />
       </Container>
     </Background>
   );
 }
+
+export default withNavigationFocus(Dashboard);

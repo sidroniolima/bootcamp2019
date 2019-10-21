@@ -4,7 +4,7 @@ import pt from 'date-fns/locale/pt';
 
 import {Container, Content, Image, Title, Info, Button} from './styles';
 
-export default function Meetup({data}) {
+export default function Meetup({data, onHandle, buttonText}) {
   const dateFormatted = format(
     parseISO(data.date),
     "dd 'de' MMMM, 'às' HH'h'",
@@ -17,7 +17,7 @@ export default function Meetup({data}) {
     <Container>
       <Image
         source={{
-          uri: data.banner.url.replace('localhost', '192.168.0.49'),
+          uri: data.banner.url.replace('localhost', '192.168.15.19'),
         }}
       />
       <Content>
@@ -25,7 +25,7 @@ export default function Meetup({data}) {
         <Info>{dateFormatted}</Info>
         <Info>{data.location}</Info>
         <Info>Organizador: Diego Fernandes</Info>
-        <Button onPress={() => {}}>Realizar inscrição</Button>
+        <Button onPress={onHandle}>{buttonText}</Button>
       </Content>
     </Container>
   );
