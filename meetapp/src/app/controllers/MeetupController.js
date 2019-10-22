@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { isBefore, parse, startOfDay, endOfDay } from 'date-fns';
+import { isBefore, parseISO, startOfDay, endOfDay } from 'date-fns';
 import { Op } from 'sequelize';
 
 import File from '../models/File';
@@ -13,7 +13,7 @@ class MeetupController {
     const page = req.query.page || 1;
 
     if (req.query.date) {
-      const searchDate = parse(req.query.date);
+      const searchDate = parseISO(req.query.date);
 
       where.date = {
         [Op.between]: [startOfDay(searchDate), endOfDay(searchDate)],
@@ -49,7 +49,7 @@ class MeetupController {
     const page = req.query.page || 1;
 
     if (req.query.date) {
-      const searchDate = parse(req.query.date);
+      const searchDate = parseISO(req.query.date);
 
       where.date = {
         [Op.between]: [startOfDay(searchDate), endOfDay(searchDate)],

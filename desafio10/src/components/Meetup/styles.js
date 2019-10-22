@@ -16,7 +16,7 @@ export const Image = styled.Image`
 `;
 
 export const Content = styled.View`
-  flex: 1;
+  flex: 1 auto;
   padding: 15px;
 `;
 
