@@ -1,4 +1,6 @@
 import React, {useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Alert} from 'react-native';
 import {withNavigationFocus} from 'react-navigation';
 import api from '~/services/api';
@@ -6,8 +8,9 @@ import api from '~/services/api';
 import Background from '~/components/Background';
 import Meetup from '~/components/Meetup';
 import DateInput from '~/components/DateInput';
+import Logo from '~/components/Logo';
 
-import {Container, MeetupList} from './styles';
+import {Container, Content, MeetupList} from './styles';
 
 function Dashboard({isFocused}) {
   const [date, setDate] = useState(new Date());
@@ -60,6 +63,7 @@ function Dashboard({isFocused}) {
   return (
     <Background>
       <Container>
+        <Logo />
         <DateInput date={date} onChange={date => setDate(date)} />
         <MeetupList
           data={meetups}
@@ -78,5 +82,18 @@ function Dashboard({isFocused}) {
     </Background>
   );
 }
+
+function IconTab({tintColor}) {
+  return <Icon name="event" size={20} color={tintColor} />;
+}
+
+IconTab.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
+Dashboard.navigationOptions = {
+  tabBarLabel: 'Dashboard',
+  tabBarIcon: IconTab,
+};
 
 export default withNavigationFocus(Dashboard);

@@ -1,10 +1,13 @@
 import React, {useState, useEffect} from 'react';
+import PropTypes from 'prop-types';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import {Alert} from 'react-native';
 import {withNavigationFocus} from 'react-navigation';
 import api from '~/services/api';
 
 import Background from '~/components/Background';
 import Meetup from '~/components/Meetup';
+import Logo from '~/components/Logo';
 
 import {Container, MeetupList} from './styles';
 
@@ -38,6 +41,7 @@ function Subscriptions({isFocused}) {
   return (
     <Background>
       <Container>
+        <Logo />
         <MeetupList
           data={subscriptions}
           keyExtractor={item => String(item.id)}
@@ -54,8 +58,17 @@ function Subscriptions({isFocused}) {
   );
 }
 
+function IconTab({tintColor}) {
+  return <Icon name="loyalty" size={20} color={tintColor} />;
+}
+
+IconTab.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
 Subscriptions.navigationOptions = {
   tabBarLabel: 'Inscrições',
+  tabBarIcon: IconTab,
 };
 
 export default withNavigationFocus(Subscriptions);

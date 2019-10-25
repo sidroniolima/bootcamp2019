@@ -1,11 +1,13 @@
 import React, {useState, useRef, useEffect} from 'react';
+import PropTypes from 'prop-types';
 import {useDispatch, useSelector} from 'react-redux';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 import Background from '~/components/Background';
+import Logo from '~/components/Logo';
 
 import {
   Container,
-  Title,
   Separator,
   Form,
   FormInput,
@@ -56,7 +58,7 @@ export default function Profile() {
   return (
     <Background>
       <Container>
-        <Title>Meu perfil</Title>
+        <Logo />
         <Form>
           <FormInput
             icon="person-outline"
@@ -124,6 +126,15 @@ export default function Profile() {
   );
 }
 
+function IconTab({tintColor}) {
+  return <Icon name="person" size={20} color={tintColor} />;
+}
+
+IconTab.propTypes = {
+  tintColor: PropTypes.string.isRequired,
+};
+
 Profile.navigationOptions = {
   tabBarLabel: 'Profile',
+  tabBarIcon: IconTab,
 };
